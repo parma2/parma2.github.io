@@ -1,0 +1,42 @@
+<% layout("layouts/boilerplate") %>
+
+<link rel="stylesheet" href="/stylesheets/index.css">
+<p id="home-header"><span>Art Social:</span> Connecting Arts Around the World</p>
+<div id="cluster-map" style="width: 100%; height: 500px"></div>
+<h1>All Arts</h1>
+<% if (currentUser) { %>
+    <div>
+        <a href="/artsocial/new" class="btn btn-sm btn-info mb-3 mt-1">Add New Art</a>
+    </div>
+<% } %>
+
+<% for (let campground of campgrounds ) { %>
+    <div class="card mb-3">
+        <div class="row">
+            <div class="col-md-4">
+                <% if (campground.images.length) { %> 
+                    <img class="img-fluid rounded" alt="" src="<%= campground.images[0].url %>">
+                <% } else { %>
+                    <img class="img-fluid rounded" alt="" src="https://res.cloudinary.com/dijfxhm1t/image/upload/v1673616171/YelpCamp/k9wtlgv9hhpir9frickg.jpg">
+                <% } %>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"><%= campground.title %></h5>
+                    <p class="card-text"><%= campground.description %></p>
+                    <p class="card-text">
+                        <small class="text-muted"><%= campground.location %></small>
+                    </p>
+                    <a href="/artsocial/<%= campground._id %>" class="btn btn-primary">View <%= campground.title %></a>
+                </div>
+            </div>
+        </div>
+    </div>
+<% } %>
+
+<script>
+    const mapBoxToken = "<%- process.env.MAPBOX_TOKEN %>";
+    const campgrounds = { features: <%- JSON.stringify(campgrounds) %> }
+</script>
+
+<script src="/javascripts/clusterMap.js"></script>
